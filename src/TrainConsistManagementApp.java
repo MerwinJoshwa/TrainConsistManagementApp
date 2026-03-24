@@ -1,45 +1,40 @@
 import java.util.*;
 
-class UseCase2TrainConsistManagementApp{
+class UseCase3TrainConsistManagementApp{
     String bog;
-    public void addPassenger(ArrayList<String> list){
+    public void addbogieID(HashSet<String> set){
         Scanner input=new Scanner(System.in);
-        System.out.println("Enter Passenger bogies:");
+        System.out.println("Enter bogie ID: ");
         bog=input.nextLine();
-        list.add(bog);
+        set.add(bog);
     }
 
-    public void display(ArrayList<String> list){
-        for(String item: list){
+    public void display(HashSet<String> set){
+        for(String item: set){
             System.out.println(item);
         }
     }
 
-    public void remove(ArrayList<String> list,int pos){
-        list.remove(pos);
-    }
+
 }
 
 public class TrainConsistManagementApp {
     public static void main(String[] args) {
         Scanner input=new Scanner(System.in);
-        UseCase2TrainConsistManagementApp uc2 =new UseCase2TrainConsistManagementApp();
+        UseCase3TrainConsistManagementApp uc3 =new UseCase3TrainConsistManagementApp();
         System.out.println("=====================================");
-        System.out.println(" UC2 - Add Passenger Bogies to Train");
+        System.out.println(" UC3 -  Track Unique Bogie ID");
         System.out.println("=====================================\n");
 
-        ArrayList<String> trainConsist = new ArrayList<>();
-        System.out.println("Enter no of Bogies to add");
+        HashSet<String> bogies=new HashSet<>();
+
+        System.out.println("Enter no of Bogies ID to add");
         int n=input.nextInt();
         for(int i=0;i<n;i++){
-            uc2.addPassenger(trainConsist);
-
+            uc3.addbogieID(bogies);
         }
-        System.out.println("Removing bogies from list");
-        System.out.println("Enter position to remove");
-        int pos=input.nextInt();
-        uc2.remove(trainConsist,pos);
-        uc2.display(trainConsist);
+        uc3.display(bogies);
+
 
 
 
