@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 class Bogie {
@@ -34,49 +32,37 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC9: Group Bogies by Type (Collectors.groupingBy)
-        System.out.println("--- UC9: Group Bogies by Type (Collectors.groupingBy) ---");
+        // UC10: Count Total Seats in Train (reduce)
+        System.out.println("--- UC10: Count Total Seats in Train (reduce) ---");
         System.out.println();
 
+        // Create a List<Bogie> with bogies
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 96));
         bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("Sleeper", 72));  // Duplicate
-        bogies.add(new Bogie("AC Chair", 96)); // Duplicate
 
         // Display all bogies
-        System.out.println("All bogies in the train:");
+        System.out.println("Bogies in the train:");
         for (int i = 0; i < bogies.size(); i++) {
             System.out.println((i + 1) + ". " + bogies.get(i));
         }
         System.out.println();
 
-        // Group bogies by type using Collectors.groupingBy
-        System.out.println("Grouping bogies by type...");
-        Map<String, List<Bogie>> groupedBogies = bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
-        System.out.println("Grouping completed.");
+        // Calculate total seats using stream reduce
+        System.out.println("Calculating total seating capacity...");
+        int totalSeats = bogies.stream()
+                .mapToInt(Bogie::getCapacity)
+                .sum();
+        System.out.println("Total seating capacity: " + totalSeats + " seats");
         System.out.println();
 
-        // Display grouped bogies
-        System.out.println("Grouped bogies by type:");
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            String type = entry.getKey();
-            List<Bogie> group = entry.getValue();
-            System.out.println("Type: " + type + " (" + group.size() + " bogies)");
-            for (int i = 0; i < group.size(); i++) {
-                System.out.println("  " + (i + 1) + ". " + group.get(i));
-            }
-            System.out.println();
-        }
-
-        System.out.println("Key Benefits of Collectors.groupingBy:");
-        System.out.println("✓ Transforms flat data into categorized structures");
-        System.out.println("✓ Enables structured reporting and analysis");
-        System.out.println("✓ Introduces advanced stream collectors");
-        System.out.println("✓ Improves data organization for dashboards");
-        System.out.println("✓ Builds foundation for analytics operations");
+        System.out.println("Key Benefits of Stream reduce:");
+        System.out.println("✓ Enables functional aggregation of data");
+        System.out.println("✓ Provides quantitative metrics for planning");
+        System.out.println("✓ Replaces manual summation loops");
+        System.out.println("✓ Improves code readability and safety");
+        System.out.println("✓ Builds foundation for advanced analytics");
         System.out.println();
 
         System.out.println("Program continues...");
