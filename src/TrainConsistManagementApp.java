@@ -1,6 +1,7 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 class Bogie {
     private String name;
@@ -28,51 +29,52 @@ class Bogie {
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
+        // Print welcome message
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        System.out.println("--- UC7: Sort Bogies by Capacity (Comparator) ---");
+        // UC8: Filter Passenger Bogies Using Streams
+        System.out.println("--- UC8: Filter Passenger Bogies Using Streams ---");
         System.out.println();
 
+        // Create a List<Bogie> to store passenger bogies
         List<Bogie> bogies = new ArrayList<>();
-
-        // Add bogies with their capacities
-        System.out.println("Creating passenger bogie objects...");
         bogies.add(new Bogie("Sleeper", 72));
-        System.out.println("Added: Sleeper with 72 seats");
         bogies.add(new Bogie("AC Chair", 96));
-        System.out.println("Added: AC Chair with 96 seats");
         bogies.add(new Bogie("First Class", 48));
-        System.out.println("Added: First Class with 48 seats");
-        System.out.println();
 
-        System.out.println("Bogies before sorting (insertion order):");
-        int count = 1;
-        for (Bogie bogie : bogies) {
-            System.out.println(count + ". " + bogie);
-            count++;
+        // Display all bogies
+        System.out.println("All passenger bogies:");
+        for (int i = 0; i < bogies.size(); i++) {
+            System.out.println((i + 1) + ". " + bogies.get(i));
         }
         System.out.println();
 
-        System.out.println("Sorting bogies by seating capacity...");
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
-        System.out.println("Sorting completed.");
+        // Filter bogies with capacity > 60 using streams
+        System.out.println("Filtering bogies with seating capacity > 60...");
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+        System.out.println("Filtering completed.");
         System.out.println();
 
-        System.out.println("Bogies after sorting by capacity (ascending):");
-        count = 1;
-        for (Bogie bogie : bogies) {
-            System.out.println(count + ". " + bogie);
-            count++;
+        // Display filtered bogies
+        System.out.println("Filtered bogies (capacity > 60):");
+        if (filteredBogies.isEmpty()) {
+            System.out.println("No bogies match the filter criteria.");
+        } else {
+            for (int i = 0; i < filteredBogies.size(); i++) {
+                System.out.println((i + 1) + ". " + filteredBogies.get(i));
+            }
         }
         System.out.println();
 
-        System.out.println("Key Benefits of Comparator:");
-        System.out.println("✓ Introduces object-based collection handling");
-        System.out.println("✓ Enables custom sorting based on business rules");
-        System.out.println("✓ Improves train planning and capacity analysis");
-        System.out.println("✓ Demonstrates separation of data and logic");
-        System.out.println("✓ Prepares for enterprise-level sorting operations");
+        System.out.println("Key Benefits of Stream API:");
+        System.out.println("✓ Declarative filtering without manual loops");
+        System.out.println("✓ Concise and readable business logic");
+        System.out.println("✓ Functional programming style");
+        System.out.println("✓ Improves code maintainability");
+        System.out.println("✓ Prepares for advanced stream operations");
         System.out.println();
 
         System.out.println("Program continues...");
