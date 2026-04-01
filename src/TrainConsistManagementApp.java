@@ -1,44 +1,80 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-class UseCase3TrainConsistManagementApp{
-    String bog;
-    public void addbogieID(HashSet<String> set){
-        Scanner input=new Scanner(System.in);
-        System.out.println("Enter bogie ID: ");
-        bog=input.nextLine();
-        set.add(bog);
+class Bogie {
+    private String name;
+    private int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public void display(HashSet<String> set){
-        for(String item: set){
-            System.out.println(item);
-        }
+    public String getName() {
+        return name;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
 
+    @Override
+    public String toString() {
+        return name + " (" + capacity + " seats)";
+    }
 }
 
 public class TrainConsistManagementApp {
+
     public static void main(String[] args) {
-        Scanner input=new Scanner(System.in);
-        UseCase3TrainConsistManagementApp uc3 =new UseCase3TrainConsistManagementApp();
-        System.out.println("=====================================");
-        System.out.println(" UC3 -  Track Unique Bogie ID");
-        System.out.println("=====================================\n");
+        System.out.println("=== Train Consist Management App ===");
+        System.out.println();
 
-        HashSet<String> bogies=new HashSet<>();
+        System.out.println("--- UC7: Sort Bogies by Capacity (Comparator) ---");
+        System.out.println();
 
-        System.out.println("Enter no of Bogies ID to add");
-        int n=input.nextInt();
-        for(int i=0;i<n;i++){
-            uc3.addbogieID(bogies);
+        List<Bogie> bogies = new ArrayList<>();
+
+        // Add bogies with their capacities
+        System.out.println("Creating passenger bogie objects...");
+        bogies.add(new Bogie("Sleeper", 72));
+        System.out.println("Added: Sleeper with 72 seats");
+        bogies.add(new Bogie("AC Chair", 96));
+        System.out.println("Added: AC Chair with 96 seats");
+        bogies.add(new Bogie("First Class", 48));
+        System.out.println("Added: First Class with 48 seats");
+        System.out.println();
+
+        System.out.println("Bogies before sorting (insertion order):");
+        int count = 1;
+        for (Bogie bogie : bogies) {
+            System.out.println(count + ". " + bogie);
+            count++;
         }
-        uc3.display(bogies);
+        System.out.println();
 
+        System.out.println("Sorting bogies by seating capacity...");
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+        System.out.println("Sorting completed.");
+        System.out.println();
 
+        System.out.println("Bogies after sorting by capacity (ascending):");
+        count = 1;
+        for (Bogie bogie : bogies) {
+            System.out.println(count + ". " + bogie);
+            count++;
+        }
+        System.out.println();
 
+        System.out.println("Key Benefits of Comparator:");
+        System.out.println("✓ Introduces object-based collection handling");
+        System.out.println("✓ Enables custom sorting based on business rules");
+        System.out.println("✓ Improves train planning and capacity analysis");
+        System.out.println("✓ Demonstrates separation of data and logic");
+        System.out.println("✓ Prepares for enterprise-level sorting operations");
+        System.out.println();
 
-
-
+        System.out.println("Program continues...");
     }
 }
