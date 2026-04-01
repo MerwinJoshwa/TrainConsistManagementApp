@@ -1,13 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+
+class InvalidCapacityException extends Exception {
+    public InvalidCapacityException(String message) {
+        super(message);
+    }
+}
 
 
 class Bogie {
     private String name;
     private int capacity;
 
-    public Bogie(String name, int capacity) {
+    public Bogie(String name, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than zero");
+        }
         this.name = name;
         this.capacity = capacity;
     }
@@ -33,60 +42,59 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC13: Performance Comparison (Loops vs Streams)
-        System.out.println("--- UC13: Performance Comparison (Loops vs Streams) ---");
+        // UC14: Handle Invalid Bogie Capacity (Custom Exception)
+        System.out.println("--- UC14: Handle Invalid Bogie Capacity (Custom Exception) ---");
         System.out.println();
 
-        // Create a large list of bogies for testing
-        List<Bogie> bogies = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            String name = (i % 3 == 0) ? "Sleeper" : (i % 3 == 1) ? "AC Chair" : "First Class";
-            int capacity = 30 + (i % 100); // Capacities from 30 to 129
-            bogies.add(new Bogie(name, capacity));
+        List<Bogie> validBogies = new ArrayList<>();
+
+        // Test valid bogie creation
+        try {
+            Bogie sleeper = new Bogie("Sleeper", 72);
+            validBogies.add(sleeper);
+            System.out.println("✓ Created valid bogie: " + sleeper);
+        } catch (InvalidCapacityException e) {
+            System.out.println("✗ Unexpected error: " + e.getMessage());
         }
-        System.out.println("Created " + bogies.size() + " bogies for performance testing.");
-        System.out.println();
 
-        // Measure loop-based filtering
-        long startTime = System.nanoTime();
-        List<Bogie> loopFiltered = new ArrayList<>();
-        for (Bogie bogie : bogies) {
-            if (bogie.getCapacity() > 60) {
-                loopFiltered.add(bogie);
-            }
+        // Test invalid bogie creation (negative capacity)
+        try {
+            Bogie invalidBogie = new Bogie("Invalid", -10);
+            System.out.println("✗ This should not print: " + invalidBogie);
+        } catch (InvalidCapacityException e) {
+            System.out.println("✓ Caught invalid capacity: " + e.getMessage());
         }
-        long endTime = System.nanoTime();
-        long loopTime = endTime - startTime;
 
-        // Measure stream-based filtering
-        startTime = System.nanoTime();
-        List<Bogie> streamFiltered = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
-        endTime = System.nanoTime();
-        long streamTime = endTime - startTime;
+        // Test invalid bogie creation (zero capacity)
+        try {
+            Bogie zeroBogie = new Bogie("Zero", 0);
+            System.out.println("✗ This should not print: " + zeroBogie);
+        } catch (InvalidCapacityException e) {
+            System.out.println("✓ Caught invalid capacity: " + e.getMessage());
+        }
 
-        // Display results
-        System.out.println("Performance Comparison Results:");
-        System.out.println("Loop-based filtering: " + loopFiltered.size() + " bogies, Time: " + loopTime + " ns");
-        System.out.println("Stream-based filtering: " + streamFiltered.size() + " bogies, Time: " + streamTime + " ns");
+        // Test another valid bogie
+        try {
+            Bogie acChair = new Bogie("AC Chair", 96);
+            validBogies.add(acChair);
+            System.out.println("✓ Created valid bogie: " + acChair);
+        } catch (InvalidCapacityException e) {
+            System.out.println("✗ Unexpected error: " + e.getMessage());
+        }
+
         System.out.println();
-
-        if (loopTime < streamTime) {
-            System.out.println("✓ Loop-based approach was faster in this test.");
-        } else if (streamTime < loopTime) {
-            System.out.println("✓ Stream-based approach was faster in this test.");
-        } else {
-            System.out.println("✓ Both approaches had similar performance in this test.");
+        System.out.println("Valid bogies created: " + validBogies.size());
+        for (Bogie b : validBogies) {
+            System.out.println("- " + b);
         }
         System.out.println();
 
-        System.out.println("Key Benefits of Performance Benchmarking:");
-        System.out.println("✓ Introduces measurement-driven optimization");
-        System.out.println("✓ Compares imperative vs declarative styles");
-        System.out.println("✓ Avoids premature performance assumptions");
-        System.out.println("✓ Builds awareness of execution costs");
-        System.out.println("✓ Encourages evidence-based development decisions");
+        System.out.println("Key Benefits of Custom Exceptions:");
+        System.out.println("✓ Enforces business rules at object creation");
+        System.out.println("✓ Prevents invalid data from entering the system");
+        System.out.println("✓ Provides clear error messages");
+        System.out.println("✓ Encourages fail-fast validation");
+        System.out.println("✓ Improves system reliability");
         System.out.println();
 
         System.out.println("Program continues...");
