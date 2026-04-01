@@ -1,29 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 
-class Bogie {
-    private String name;
-    private int capacity;
-
-    public Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + capacity + " seats)";
-    }
-}
 
 public class TrainConsistManagementApp {
 
@@ -32,37 +11,49 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC10: Count Total Seats in Train (reduce)
-        System.out.println("--- UC10: Count Total Seats in Train (reduce) ---");
+        // UC11: Validate Train ID & Cargo Codes (Regex)
+        System.out.println("--- UC11: Validate Train ID & Cargo Codes (Regex) ---");
         System.out.println();
 
-        // Create a List<Bogie> with bogies
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 96));
-        bogies.add(new Bogie("First Class", 48));
+        Scanner scanner = new Scanner(System.in);
 
-        // Display all bogies
-        System.out.println("Bogies in the train:");
-        for (int i = 0; i < bogies.size(); i++) {
-            System.out.println((i + 1) + ". " + bogies.get(i));
+        // Get Train ID
+        System.out.print("Enter Train ID (format: TRN-1234): ");
+        String trainId = scanner.nextLine();
+
+        // Get Cargo Code
+        System.out.print("Enter Cargo Code (format: PET-AB): ");
+        String cargoCode = scanner.nextLine();
+
+        // Validate Train ID
+        Pattern trainIdPattern = Pattern.compile("TRN-\\d{4}");
+        Matcher trainIdMatcher = trainIdPattern.matcher(trainId);
+        boolean isTrainIdValid = trainIdMatcher.matches();
+
+        // Validate Cargo Code
+        Pattern cargoCodePattern = Pattern.compile("PET-[A-Z]{2}");
+        Matcher cargoCodeMatcher = cargoCodePattern.matcher(cargoCode);
+        boolean isCargoCodeValid = cargoCodeMatcher.matches();
+
+        // Display results
+        System.out.println();
+        System.out.println("Validation Results:");
+        System.out.println("Train ID '" + trainId + "': " + (isTrainIdValid ? "Valid" : "Invalid"));
+        System.out.println("Cargo Code '" + cargoCode + "': " + (isCargoCodeValid ? "Valid" : "Invalid"));
+
+        if (isTrainIdValid && isCargoCodeValid) {
+            System.out.println("✓ All inputs are valid. Proceeding with train operations.");
+        } else {
+            System.out.println("✗ Invalid input detected. Please correct and try again.");
         }
         System.out.println();
 
-        // Calculate total seats using stream reduce
-        System.out.println("Calculating total seating capacity...");
-        int totalSeats = bogies.stream()
-                .mapToInt(Bogie::getCapacity)
-                .sum();
-        System.out.println("Total seating capacity: " + totalSeats + " seats");
-        System.out.println();
-
-        System.out.println("Key Benefits of Stream reduce:");
-        System.out.println("✓ Enables functional aggregation of data");
-        System.out.println("✓ Provides quantitative metrics for planning");
-        System.out.println("✓ Replaces manual summation loops");
-        System.out.println("✓ Improves code readability and safety");
-        System.out.println("✓ Builds foundation for advanced analytics");
+        System.out.println("Key Benefits of Regex Validation:");
+        System.out.println("✓ Ensures data integrity and format correctness");
+        System.out.println("✓ Prevents invalid data from entering the system");
+        System.out.println("✓ Introduces pattern-based validation techniques");
+        System.out.println("✓ Improves robustness of input handling");
+        System.out.println("✓ Builds foundation for enterprise validation rules");
         System.out.println();
 
         System.out.println("Program continues...");

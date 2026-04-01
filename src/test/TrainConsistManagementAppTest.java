@@ -1,76 +1,69 @@
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TrainConsistManagementAppTest {
 
-    // Helper method to create test bogies
-    private List<Bogie> createTestBogies() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 96));
-        bogies.add(new Bogie("First Class", 48));
-        return bogies;
+    // Helper methods for validation
+    private boolean isValidTrainId(String trainId) {
+        Pattern pattern = Pattern.compile("TRN-\\d{4}");
+        Matcher matcher = pattern.matcher(trainId);
+        return matcher.matches();
     }
 
-    // Helper method to calculate total seats
-    private int calculateTotalSeats(List<Bogie> bogies) {
-        return bogies.stream()
-                .mapToInt(Bogie::getCapacity)
-                .sum();
+    private boolean isValidCargoCode(String cargoCode) {
+        Pattern pattern = Pattern.compile("PET-[A-Z]{2}");
+        Matcher matcher = pattern.matcher(cargoCode);
+        return matcher.matches();
     }
 
     @Test
-    public void testReduce_TotalSeatCalculation() {
-        List<Bogie> bogies = createTestBogies();
-        int total = calculateTotalSeats(bogies);
-        assertEquals(72 + 96 + 48, total);
+    public void testRegex_ValidTrainID() {
+        assertTrue(isValidTrainId("TRN-1234"));
     }
 
     @Test
-    public void testReduce_MultipleBogiesAggregation() {
-        List<Bogie> bogies = createTestBogies();
-        int total = calculateTotalSeats(bogies);
-        assertEquals(216, total);
+    public void testRegex_InvalidTrainIDFormat() {
+        assertFalse(isValidTrainId("TRAIN12"));
+        assertFalse(isValidTrainId("TRN12A"));
+        assertFalse(isValidTrainId("1234-TRN"));
     }
 
     @Test
-    public void testReduce_SingleBogieCapacity() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        int total = calculateTotalSeats(bogies);
-        assertEquals(72, total);
+    public void testRegex_ValidCargoCode() {
+        assertTrue(isValidCargoCode("PET-AB"));
     }
 
     @Test
-    public void testReduce_EmptyBogieList() {
-        List<Bogie> bogies = new ArrayList<>();
-        int total = calculateTotalSeats(bogies);
-        assertEquals(0, total);
+    public void testRegex_InvalidCargoCodeFormat() {
+        assertFalse(isValidCargoCode("PET-ab"));
+        assertFalse(isValidCargoCode("PET123"));
+        assertFalse(isValidCargoCode("AB-PET"));
     }
 
     @Test
-    public void testReduce_CorrectCapacityExtraction() {
-        List<Bogie> bogies = createTestBogies();
-        // Assuming mapToInt extracts correctly, as tested in total calculation
-        int total = calculateTotalSeats(bogies);
-        assertEquals(216, total);
+    public void testRegex_TrainIDDigitLengthValidation() {
+        assertFalse(isValidTrainId("TRN-123"));
+        assertFalse(isValidTrainId("TRN-12345"));
     }
 
     @Test
-    public void testReduce_AllBogiesIncluded() {
-        List<Bogie> bogies = createTestBogies();
-        int total = calculateTotalSeats(bogies);
-        assertEquals(216, total); // All three included
+    public void testRegex_CargoCodeUppercaseValidation() {
+        assertFalse(isValidCargoCode("PET-ab"));
+        assertFalse(isValidCargoCode("PET-aB"));
     }
 
     @Test
-    public void testReduce_OriginalListUnchanged() {
-        List<Bogie> bogies = createTestBogies();
-        List<Bogie> original = new ArrayList<>(bogies);
-        calculateTotalSeats(bogies);
-        assertEquals(original, bogies);
+    public void testRegex_EmptyInputHandling() {
+        assertFalse(isValidTrainId(""));
+        assertFalse(isValidCargoCode(""));
+    }
+
+    @Test
+    public void testRegex_ExactPatternMatch() {
+        assertFalse(isValidTrainId("TRN-1234extra"));
+        assertFalse(isValidCargoCode("PET-ABextra"));
     }
 }
