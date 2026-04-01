@@ -1,8 +1,28 @@
-import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.ArrayList;
+import java.util.List;
 
+class GoodsBogie {
+    private String type;
+    private String cargo;
 
+    public GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    @Override
+    public String toString() {
+        return type + " bogie carrying " + cargo;
+    }
+}
 
 public class TrainConsistManagementApp {
 
@@ -11,49 +31,45 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC11: Validate Train ID & Cargo Codes (Regex)
-        System.out.println("--- UC11: Validate Train ID & Cargo Codes (Regex) ---");
+        // UC12: Safety Compliance Check for Goods Bogies
+        System.out.println("--- UC12: Safety Compliance Check for Goods Bogies ---");
         System.out.println();
 
-        Scanner scanner = new Scanner(System.in);
+        // Create a list of goods bogies
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Rectangular", "Coal"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Open", "Grain"));
 
-        // Get Train ID
-        System.out.print("Enter Train ID (format: TRN-1234): ");
-        String trainId = scanner.nextLine();
-
-        // Get Cargo Code
-        System.out.print("Enter Cargo Code (format: PET-AB): ");
-        String cargoCode = scanner.nextLine();
-
-        // Validate Train ID
-        Pattern trainIdPattern = Pattern.compile("TRN-\\d{4}");
-        Matcher trainIdMatcher = trainIdPattern.matcher(trainId);
-        boolean isTrainIdValid = trainIdMatcher.matches();
-
-        // Validate Cargo Code
-        Pattern cargoCodePattern = Pattern.compile("PET-[A-Z]{2}");
-        Matcher cargoCodeMatcher = cargoCodePattern.matcher(cargoCode);
-        boolean isCargoCodeValid = cargoCodeMatcher.matches();
-
-        // Display results
-        System.out.println();
-        System.out.println("Validation Results:");
-        System.out.println("Train ID '" + trainId + "': " + (isTrainIdValid ? "Valid" : "Invalid"));
-        System.out.println("Cargo Code '" + cargoCode + "': " + (isCargoCodeValid ? "Valid" : "Invalid"));
-
-        if (isTrainIdValid && isCargoCodeValid) {
-            System.out.println("✓ All inputs are valid. Proceeding with train operations.");
-        } else {
-            System.out.println("✗ Invalid input detected. Please correct and try again.");
+        // Display goods bogies
+        System.out.println("Goods bogies in the train:");
+        for (int i = 0; i < goodsBogies.size(); i++) {
+            System.out.println((i + 1) + ". " + goodsBogies.get(i));
         }
         System.out.println();
 
-        System.out.println("Key Benefits of Regex Validation:");
-        System.out.println("✓ Ensures data integrity and format correctness");
-        System.out.println("✓ Prevents invalid data from entering the system");
-        System.out.println("✓ Introduces pattern-based validation techniques");
-        System.out.println("✓ Improves robustness of input handling");
-        System.out.println("✓ Builds foundation for enterprise validation rules");
+        // Validate safety compliance using streams
+        System.out.println("Checking safety compliance...");
+        boolean isSafe = goodsBogies.stream()
+                .allMatch(b -> !"Cylindrical".equals(b.getType()) || "Petroleum".equals(b.getCargo()));
+
+        System.out.println("Safety compliance check result: " + (isSafe ? "SAFE" : "UNSAFE"));
+        System.out.println();
+
+        if (isSafe) {
+            System.out.println("✓ All goods bogies comply with safety rules.");
+        } else {
+            System.out.println("✗ Safety violation detected! Cylindrical bogies must carry Petroleum only.");
+        }
+        System.out.println();
+
+        System.out.println("Key Benefits of Stream Validation:");
+        System.out.println("✓ Enforces business rules declaratively");
+        System.out.println("✓ Prevents unsafe configurations early");
+        System.out.println("✓ Uses functional programming for validation");
+        System.out.println("✓ Improves code readability and safety");
+        System.out.println("✓ Builds foundation for domain rule enforcement");
         System.out.println();
 
         System.out.println("Program continues...");
