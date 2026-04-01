@@ -1,26 +1,28 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-class GoodsBogie {
-    private String type;
-    private String cargo;
 
-    public GoodsBogie(String type, String cargo) {
-        this.type = type;
-        this.cargo = cargo;
+class Bogie {
+    private String name;
+    private int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public String getCargo() {
-        return cargo;
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
     public String toString() {
-        return type + " bogie carrying " + cargo;
+        return name + " (" + capacity + " seats)";
     }
 }
 
@@ -31,45 +33,60 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC12: Safety Compliance Check for Goods Bogies
-        System.out.println("--- UC12: Safety Compliance Check for Goods Bogies ---");
+        // UC13: Performance Comparison (Loops vs Streams)
+        System.out.println("--- UC13: Performance Comparison (Loops vs Streams) ---");
         System.out.println();
 
-        // Create a list of goods bogies
-        List<GoodsBogie> goodsBogies = new ArrayList<>();
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsBogies.add(new GoodsBogie("Rectangular", "Coal"));
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsBogies.add(new GoodsBogie("Open", "Grain"));
-
-        // Display goods bogies
-        System.out.println("Goods bogies in the train:");
-        for (int i = 0; i < goodsBogies.size(); i++) {
-            System.out.println((i + 1) + ". " + goodsBogies.get(i));
+        // Create a large list of bogies for testing
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            String name = (i % 3 == 0) ? "Sleeper" : (i % 3 == 1) ? "AC Chair" : "First Class";
+            int capacity = 30 + (i % 100); // Capacities from 30 to 129
+            bogies.add(new Bogie(name, capacity));
         }
+        System.out.println("Created " + bogies.size() + " bogies for performance testing.");
         System.out.println();
 
-        // Validate safety compliance using streams
-        System.out.println("Checking safety compliance...");
-        boolean isSafe = goodsBogies.stream()
-                .allMatch(b -> !"Cylindrical".equals(b.getType()) || "Petroleum".equals(b.getCargo()));
+        // Measure loop-based filtering
+        long startTime = System.nanoTime();
+        List<Bogie> loopFiltered = new ArrayList<>();
+        for (Bogie bogie : bogies) {
+            if (bogie.getCapacity() > 60) {
+                loopFiltered.add(bogie);
+            }
+        }
+        long endTime = System.nanoTime();
+        long loopTime = endTime - startTime;
 
-        System.out.println("Safety compliance check result: " + (isSafe ? "SAFE" : "UNSAFE"));
+        // Measure stream-based filtering
+        startTime = System.nanoTime();
+        List<Bogie> streamFiltered = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+        endTime = System.nanoTime();
+        long streamTime = endTime - startTime;
+
+        // Display results
+        System.out.println("Performance Comparison Results:");
+        System.out.println("Loop-based filtering: " + loopFiltered.size() + " bogies, Time: " + loopTime + " ns");
+        System.out.println("Stream-based filtering: " + streamFiltered.size() + " bogies, Time: " + streamTime + " ns");
         System.out.println();
 
-        if (isSafe) {
-            System.out.println("✓ All goods bogies comply with safety rules.");
+        if (loopTime < streamTime) {
+            System.out.println("✓ Loop-based approach was faster in this test.");
+        } else if (streamTime < loopTime) {
+            System.out.println("✓ Stream-based approach was faster in this test.");
         } else {
-            System.out.println("✗ Safety violation detected! Cylindrical bogies must carry Petroleum only.");
+            System.out.println("✓ Both approaches had similar performance in this test.");
         }
         System.out.println();
 
-        System.out.println("Key Benefits of Stream Validation:");
-        System.out.println("✓ Enforces business rules declaratively");
-        System.out.println("✓ Prevents unsafe configurations early");
-        System.out.println("✓ Uses functional programming for validation");
-        System.out.println("✓ Improves code readability and safety");
-        System.out.println("✓ Builds foundation for domain rule enforcement");
+        System.out.println("Key Benefits of Performance Benchmarking:");
+        System.out.println("✓ Introduces measurement-driven optimization");
+        System.out.println("✓ Compares imperative vs declarative styles");
+        System.out.println("✓ Avoids premature performance assumptions");
+        System.out.println("✓ Builds awareness of execution costs");
+        System.out.println("✓ Encourages evidence-based development decisions");
         System.out.println();
 
         System.out.println("Program continues...");
