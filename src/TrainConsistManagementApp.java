@@ -1,46 +1,63 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class TrainConsistManagementApp {
 
-    // Method to perform Linear Search
-    public static boolean linearSearch(String[] bogieIds, String searchKey) {
-        for (int i = 0; i < bogieIds.length; i++) {
-            // Using equals() for string comparison
-            if (bogieIds[i].equals(searchKey)) {
-                return true; // Early termination when found
+    public static boolean binarySearch(String[] bogieIds, String searchKey) {
+
+        if (bogieIds == null || bogieIds.length == 0) {
+            throw new IllegalStateException("No bogies available for search.");
+        }
+
+        Arrays.sort(bogieIds);
+
+        int low = 0;
+        int high = bogieIds.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            int comparison = bogieIds[mid].compareTo(searchKey);
+
+            if (comparison == 0) {
+                return true;
+            } else if (comparison < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
-        return false; // Not found after full traversal
+
+        return false;
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Input: Number of bogies
         System.out.print("Enter number of bogies: ");
         int n = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine();
 
         String[] bogieIds = new String[n];
 
-        // Input: Bogie IDs
         System.out.println("Enter bogie IDs:");
         for (int i = 0; i < n; i++) {
             bogieIds[i] = scanner.nextLine();
         }
 
-        // Input: Search key
         System.out.print("Enter bogie ID to search: ");
         String searchKey = scanner.nextLine();
 
-        // Perform search
-        boolean found = linearSearch(bogieIds, searchKey);
+        try {
+            boolean found = binarySearch(bogieIds, searchKey);
 
-        // Output result
-        if (found) {
-            System.out.println("Bogie ID " + searchKey + " FOUND in the train consist.");
-        } else {
-            System.out.println("Bogie ID " + searchKey + " NOT FOUND in the train consist.");
+            if (found) {
+                System.out.println("Bogie ID " + searchKey + " FOUND.");
+            } else {
+                System.out.println("Bogie ID " + searchKey + " NOT FOUND.");
+            }
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
         scanner.close();
