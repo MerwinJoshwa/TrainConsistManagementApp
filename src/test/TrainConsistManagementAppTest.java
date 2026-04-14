@@ -4,41 +4,37 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainConsistManagementAppTest {
 
     @Test
-    void testCargo_SafeAssignment() {
-        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
-        cylindricalBogie.assignCargo("Petroleum");
-        assertEquals("Petroleum", cylindricalBogie.getCargo());
+    void testSort_BasicSorting() {
+        int[] capacities = {72, 56, 24, 70, 60};
+        TrainConsistManagementApp.bubbleSort(capacities);
+        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, capacities);
     }
 
     @Test
-    void testCargo_UnsafeAssignmentHandled() {
-        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
-        rectangularBogie.assignCargo("Petroleum");
-        assertNull(rectangularBogie.getCargo());
+    void testSort_AlreadySortedArray() {
+        int[] capacities = {24, 56, 60, 70, 72};
+        TrainConsistManagementApp.bubbleSort(capacities);
+        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, capacities);
     }
 
     @Test
-    void testCargo_CargoNotAssignedAfterFailure() {
-        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
-        rectangularBogie.assignCargo("Petroleum");
-        assertNull(rectangularBogie.getCargo());
+    void testSort_DuplicateValues() {
+        int[] capacities = {72, 56, 56, 24};
+        TrainConsistManagementApp.bubbleSort(capacities);
+        assertArrayEquals(new int[]{24, 56, 56, 72}, capacities);
     }
 
     @Test
-    void testCargo_ProgramContinuesAfterException() {
-        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
-        rectangularBogie.assignCargo("Petroleum");
-
-        GoodsBogie safeBogie = new GoodsBogie("Rectangular");
-        safeBogie.assignCargo("Coal");
-
-        assertEquals("Coal", safeBogie.getCargo());
+    void testSort_SingleElementArray() {
+        int[] capacities = {50};
+        TrainConsistManagementApp.bubbleSort(capacities);
+        assertArrayEquals(new int[]{50}, capacities);
     }
 
     @Test
-    void testCargo_FinallyBlockExecution() {
-        GoodsBogie bogie = new GoodsBogie("Rectangular");
-        bogie.assignCargo("Petroleum");
-        assertNull(bogie.getCargo());
+    void testSort_AllEqualValues() {
+        int[] capacities = {40, 40, 40};
+        TrainConsistManagementApp.bubbleSort(capacities);
+        assertArrayEquals(new int[]{40, 40, 40}, capacities);
     }
 }
