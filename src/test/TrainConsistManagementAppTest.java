@@ -5,36 +5,69 @@ class TrainConsistManagementAppTest {
 
     @Test
     void testSort_BasicSorting() {
-        int[] capacities = {72, 56, 24, 70, 60};
-        TrainConsistManagementApp.bubbleSort(capacities);
-        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, capacities);
+        PassengerBogie[] bogies = {
+                new PassengerBogie("Sleeper", 72),
+                new PassengerBogie("AC Chair", 56),
+                new PassengerBogie("First Class", 24),
+                new PassengerBogie("Sleeper", 70),
+                new PassengerBogie("AC Chair", 60)
+        };
+        TrainConsistManagementApp.bubbleSort(bogies);
+        int[] sorted = {24, 56, 60, 70, 72};
+        for (int i = 0; i < bogies.length; i++) {
+            assertEquals(sorted[i], bogies[i].getCapacity());
+        }
     }
 
     @Test
     void testSort_AlreadySortedArray() {
-        int[] capacities = {24, 56, 60, 70, 72};
-        TrainConsistManagementApp.bubbleSort(capacities);
-        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, capacities);
+        PassengerBogie[] bogies = {
+                new PassengerBogie("First Class", 24),
+                new PassengerBogie("AC Chair", 56),
+                new PassengerBogie("AC Chair", 60),
+                new PassengerBogie("Sleeper", 70),
+                new PassengerBogie("Sleeper", 72)
+        };
+        TrainConsistManagementApp.bubbleSort(bogies);
+        int[] sorted = {24, 56, 60, 70, 72};
+        for (int i = 0; i < bogies.length; i++) {
+            assertEquals(sorted[i], bogies[i].getCapacity());
+        }
     }
 
     @Test
     void testSort_DuplicateValues() {
-        int[] capacities = {72, 56, 56, 24};
-        TrainConsistManagementApp.bubbleSort(capacities);
-        assertArrayEquals(new int[]{24, 56, 56, 72}, capacities);
+        PassengerBogie[] bogies = {
+                new PassengerBogie("Sleeper", 72),
+                new PassengerBogie("AC Chair", 56),
+                new PassengerBogie("AC Chair", 56),
+                new PassengerBogie("First Class", 24)
+        };
+        TrainConsistManagementApp.bubbleSort(bogies);
+        int[] sorted = {24, 56, 56, 72};
+        for (int i = 0; i < bogies.length; i++) {
+            assertEquals(sorted[i], bogies[i].getCapacity());
+        }
     }
 
     @Test
     void testSort_SingleElementArray() {
-        int[] capacities = {50};
-        TrainConsistManagementApp.bubbleSort(capacities);
-        assertArrayEquals(new int[]{50}, capacities);
+        PassengerBogie[] bogies = { new PassengerBogie("Sleeper", 50) };
+        TrainConsistManagementApp.bubbleSort(bogies);
+        assertEquals(50, bogies[0].getCapacity());
     }
 
     @Test
     void testSort_AllEqualValues() {
-        int[] capacities = {40, 40, 40};
-        TrainConsistManagementApp.bubbleSort(capacities);
-        assertArrayEquals(new int[]{40, 40, 40}, capacities);
+        PassengerBogie[] bogies = {
+                new PassengerBogie("Sleeper", 40),
+                new PassengerBogie("AC Chair", 40),
+                new PassengerBogie("First Class", 40)
+        };
+        TrainConsistManagementApp.bubbleSort(bogies);
+        int[] sorted = {40, 40, 40};
+        for (int i = 0; i < bogies.length; i++) {
+            assertEquals(sorted[i], bogies[i].getCapacity());
+        }
     }
 }
