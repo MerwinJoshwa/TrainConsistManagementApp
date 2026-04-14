@@ -1,73 +1,52 @@
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+public class TrainConsistManagementAppTest {
 
-class TrainConsistManagementAppTest {
+    public static void main(String[] args) {
 
-    @Test
-    void testSort_BasicSorting() {
-        PassengerBogie[] bogies = {
-                new PassengerBogie("Sleeper", 72),
-                new PassengerBogie("AC Chair", 56),
-                new PassengerBogie("First Class", 24),
-                new PassengerBogie("Sleeper", 70),
-                new PassengerBogie("AC Chair", 60)
-        };
-        TrainConsistManagementApp.bubbleSort(bogies);
-        int[] sorted = {24, 56, 60, 70, 72};
-        for (int i = 0; i < bogies.length; i++) {
-            assertEquals(sorted[i], bogies[i].getCapacity());
-        }
+        testSearch_BogieFound();
+        testSearch_BogieNotFound();
+        testSearch_FirstElementMatch();
+        testSearch_LastElementMatch();
+        testSearch_SingleElementArray();
+
     }
 
-    @Test
-    void testSort_AlreadySortedArray() {
-        PassengerBogie[] bogies = {
-                new PassengerBogie("First Class", 24),
-                new PassengerBogie("AC Chair", 56),
-                new PassengerBogie("AC Chair", 60),
-                new PassengerBogie("Sleeper", 70),
-                new PassengerBogie("Sleeper", 72)
-        };
-        TrainConsistManagementApp.bubbleSort(bogies);
-        int[] sorted = {24, 56, 60, 70, 72};
-        for (int i = 0; i < bogies.length; i++) {
-            assertEquals(sorted[i], bogies[i].getCapacity());
-        }
+    // Test: Bogie Found
+    public static void testSearch_BogieFound() {
+        String[] bogies = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+        boolean result = TrainConsistManagementApp.linearSearch(bogies, "BG309");
+
+        System.out.println("testSearch_BogieFound: " + (result ? "PASS" : "FAIL"));
     }
 
-    @Test
-    void testSort_DuplicateValues() {
-        PassengerBogie[] bogies = {
-                new PassengerBogie("Sleeper", 72),
-                new PassengerBogie("AC Chair", 56),
-                new PassengerBogie("AC Chair", 56),
-                new PassengerBogie("First Class", 24)
-        };
-        TrainConsistManagementApp.bubbleSort(bogies);
-        int[] sorted = {24, 56, 56, 72};
-        for (int i = 0; i < bogies.length; i++) {
-            assertEquals(sorted[i], bogies[i].getCapacity());
-        }
+    // Test: Bogie Not Found
+    public static void testSearch_BogieNotFound() {
+        String[] bogies = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+        boolean result = TrainConsistManagementApp.linearSearch(bogies, "BG999");
+
+        System.out.println("testSearch_BogieNotFound: " + (!result ? "PASS" : "FAIL"));
     }
 
-    @Test
-    void testSort_SingleElementArray() {
-        PassengerBogie[] bogies = { new PassengerBogie("Sleeper", 50) };
-        TrainConsistManagementApp.bubbleSort(bogies);
-        assertEquals(50, bogies[0].getCapacity());
+    // Test: First Element Match
+    public static void testSearch_FirstElementMatch() {
+        String[] bogies = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+        boolean result = TrainConsistManagementApp.linearSearch(bogies, "BG101");
+
+        System.out.println("testSearch_FirstElementMatch: " + (result ? "PASS" : "FAIL"));
     }
 
-    @Test
-    void testSort_AllEqualValues() {
-        PassengerBogie[] bogies = {
-                new PassengerBogie("Sleeper", 40),
-                new PassengerBogie("AC Chair", 40),
-                new PassengerBogie("First Class", 40)
-        };
-        TrainConsistManagementApp.bubbleSort(bogies);
-        int[] sorted = {40, 40, 40};
-        for (int i = 0; i < bogies.length; i++) {
-            assertEquals(sorted[i], bogies[i].getCapacity());
-        }
+    // Test: Last Element Match
+    public static void testSearch_LastElementMatch() {
+        String[] bogies = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+        boolean result = TrainConsistManagementApp.linearSearch(bogies, "BG550");
+
+        System.out.println("testSearch_LastElementMatch: " + (result ? "PASS" : "FAIL"));
+    }
+
+    // Test: Single Element Array
+    public static void testSearch_SingleElementArray() {
+        String[] bogies = {"BG101"};
+        boolean result = TrainConsistManagementApp.linearSearch(bogies, "BG101");
+
+        System.out.println("testSearch_SingleElementArray: " + (result ? "PASS" : "FAIL"));
     }
 }

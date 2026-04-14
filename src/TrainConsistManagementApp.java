@@ -1,55 +1,48 @@
-class PassengerBogie {
-    private String type;
-    private int capacity;
-
-    public PassengerBogie(String type, int capacity) {
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public String getType() {
-        return type;
-    }
-}
+import java.util.Scanner;
 
 public class TrainConsistManagementApp {
 
-    public static void bubbleSort(PassengerBogie[] bogies) {
-        int n = bogies.length;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (bogies[j].getCapacity() > bogies[j + 1].getCapacity()) {
-                    PassengerBogie temp = bogies[j];
-                    bogies[j] = bogies[j + 1];
-                    bogies[j + 1] = temp;
-                }
+    // Method to perform Linear Search
+    public static boolean linearSearch(String[] bogieIds, String searchKey) {
+        for (int i = 0; i < bogieIds.length; i++) {
+            // Using equals() for string comparison
+            if (bogieIds[i].equals(searchKey)) {
+                return true; // Early termination when found
             }
         }
+        return false; // Not found after full traversal
     }
 
     public static void main(String[] args) {
-        PassengerBogie[] bogies = {
-                new PassengerBogie("Sleeper", 72),
-                new PassengerBogie("AC Chair", 56),
-                new PassengerBogie("First Class", 24),
-                new PassengerBogie("Sleeper", 70),
-                new PassengerBogie("AC Chair", 60)
-        };
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Original Capacities:");
-        for (PassengerBogie b : bogies) {
-            System.out.print(b.getCapacity() + " ");
+        // Input: Number of bogies
+        System.out.print("Enter number of bogies: ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+
+        String[] bogieIds = new String[n];
+
+        // Input: Bogie IDs
+        System.out.println("Enter bogie IDs:");
+        for (int i = 0; i < n; i++) {
+            bogieIds[i] = scanner.nextLine();
         }
 
-        bubbleSort(bogies);
+        // Input: Search key
+        System.out.print("Enter bogie ID to search: ");
+        String searchKey = scanner.nextLine();
 
-        System.out.println("\nSorted Capacities:");
-        for (PassengerBogie b : bogies) {
-            System.out.print(b.getCapacity() + " ");
+        // Perform search
+        boolean found = linearSearch(bogieIds, searchKey);
+
+        // Output result
+        if (found) {
+            System.out.println("Bogie ID " + searchKey + " FOUND in the train consist.");
+        } else {
+            System.out.println("Bogie ID " + searchKey + " NOT FOUND in the train consist.");
         }
+
+        scanner.close();
     }
 }
