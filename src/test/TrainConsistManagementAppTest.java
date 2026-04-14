@@ -1,54 +1,44 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-public class TrainConsistManagementAppTest {
+class TrainConsistManagementAppTest {
 
     @Test
-    public void testException_ValidCapacityCreation() throws InvalidCapacityException {
-        Bogie bogie = new Bogie("Sleeper", 72);
-        assertEquals("Sleeper", bogie.getName());
-        assertEquals(72, bogie.getCapacity());
+    void testCargo_SafeAssignment() {
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
+        cylindricalBogie.assignCargo("Petroleum");
+        assertEquals("Petroleum", cylindricalBogie.getCargo());
     }
 
     @Test
-    public void testException_NegativeCapacityThrowsException() {
-        InvalidCapacityException exception = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Invalid", -10);
-        });
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
+    void testCargo_UnsafeAssignmentHandled() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
+        assertNull(rectangularBogie.getCargo());
     }
 
     @Test
-    public void testException_ZeroCapacityThrowsException() {
-        InvalidCapacityException exception = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Zero", 0);
-        });
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
+    void testCargo_CargoNotAssignedAfterFailure() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
+        assertNull(rectangularBogie.getCargo());
     }
 
     @Test
-    public void testException_ExceptionMessageValidation() {
-        InvalidCapacityException exception = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Test", -1);
-        });
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
+    void testCargo_ProgramContinuesAfterException() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
+
+        GoodsBogie safeBogie = new GoodsBogie("Rectangular");
+        safeBogie.assignCargo("Coal");
+
+        assertEquals("Coal", safeBogie.getCargo());
     }
 
     @Test
-    public void testException_ObjectIntegrityAfterCreation() throws InvalidCapacityException {
-        Bogie bogie = new Bogie("AC Chair", 96);
-        assertEquals("AC Chair", bogie.getName());
-        assertEquals(96, bogie.getCapacity());
-    }
-
-    @Test
-    public void testException_MultipleValidBogiesCreation() throws InvalidCapacityException {
-        Bogie bogie1 = new Bogie("Sleeper", 72);
-        Bogie bogie2 = new Bogie("First Class", 48);
-        assertNotNull(bogie1);
-        assertNotNull(bogie2);
-        assertEquals("Sleeper", bogie1.getName());
-        assertEquals("First Class", bogie2.getName());
+    void testCargo_FinallyBlockExecution() {
+        GoodsBogie bogie = new GoodsBogie("Rectangular");
+        bogie.assignCargo("Petroleum");
+        assertNull(bogie.getCargo());
     }
 }

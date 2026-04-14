@@ -1,102 +1,48 @@
-import java.util.ArrayList;
-import java.util.List;
 
-
-class InvalidCapacityException extends Exception {
-    public InvalidCapacityException(String message) {
+class CargoSafetyException extends RuntimeException {
+    public CargoSafetyException(String message) {
         super(message);
     }
 }
+class GoodsBogie {
+    private String shape;
+    private String cargo;
 
+    public GoodsBogie(String shape) {
+        this.shape = shape;
+    }
 
-class Bogie {
-    private String name;
-    private int capacity;
-
-    public Bogie(String name, int capacity) throws InvalidCapacityException {
-        if (capacity <= 0) {
-            throw new InvalidCapacityException("Capacity must be greater than zero");
+    public void assignCargo(String cargo) {
+        try {
+            if (shape.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
+                throw new CargoSafetyException("Unsafe Assignment: Petroleum cannot be assigned to Rectangular bogie!");
+            }
+            this.cargo = cargo;
+            System.out.println("Cargo " + cargo + " successfully assigned to " + shape + " bogie.");
+        } catch (CargoSafetyException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Cargo assignment validation completed for " + shape + " bogie.");
         }
-        this.name = name;
-        this.capacity = capacity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + capacity + " seats)";
+    public String getCargo() {
+        return cargo;
     }
 }
-
 public class TrainConsistManagementApp {
-
     public static void main(String[] args) {
-        // Print welcome message
-        System.out.println("=== Train Consist Management App ===");
-        System.out.println();
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
+        cylindricalBogie.assignCargo("Petroleum");
 
-        // UC14: Handle Invalid Bogie Capacity (Custom Exception)
-        System.out.println("--- UC14: Handle Invalid Bogie Capacity (Custom Exception) ---");
-        System.out.println();
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
 
-        List<Bogie> validBogies = new ArrayList<>();
+        GoodsBogie rectangularBogieSafe = new GoodsBogie("Rectangular");
+        rectangularBogieSafe.assignCargo("Coal");
 
-        // Test valid bogie creation
-        try {
-            Bogie sleeper = new Bogie("Sleeper", 72);
-            validBogies.add(sleeper);
-            System.out.println("✓ Created valid bogie: " + sleeper);
-        } catch (InvalidCapacityException e) {
-            System.out.println("✗ Unexpected error: " + e.getMessage());
-        }
-
-        // Test invalid bogie creation (negative capacity)
-        try {
-            Bogie invalidBogie = new Bogie("Invalid", -10);
-            System.out.println("✗ This should not print: " + invalidBogie);
-        } catch (InvalidCapacityException e) {
-            System.out.println("✓ Caught invalid capacity: " + e.getMessage());
-        }
-
-        // Test invalid bogie creation (zero capacity)
-        try {
-            Bogie zeroBogie = new Bogie("Zero", 0);
-            System.out.println("✗ This should not print: " + zeroBogie);
-        } catch (InvalidCapacityException e) {
-            System.out.println("✓ Caught invalid capacity: " + e.getMessage());
-        }
-
-        // Test another valid bogie
-        try {
-            Bogie acChair = new Bogie("AC Chair", 96);
-            validBogies.add(acChair);
-            System.out.println("✓ Created valid bogie: " + acChair);
-        } catch (InvalidCapacityException e) {
-            System.out.println("✗ Unexpected error: " + e.getMessage());
-        }
-
-        System.out.println();
-        System.out.println("Valid bogies created: " + validBogies.size());
-        for (Bogie b : validBogies) {
-            System.out.println("- " + b);
-        }
-        System.out.println();
-
-        System.out.println("Key Benefits of Custom Exceptions:");
-        System.out.println("✓ Enforces business rules at object creation");
-        System.out.println("✓ Prevents invalid data from entering the system");
-        System.out.println("✓ Provides clear error messages");
-        System.out.println("✓ Encourages fail-fast validation");
-        System.out.println("✓ Improves system reliability");
-        System.out.println();
-
-        System.out.println("Program continues...");
+        System.out.println("Final Cargo in Cylindrical Bogie: " + cylindricalBogie.getCargo());
+        System.out.println("Final Cargo in Rectangular Bogie (unsafe attempt): " + rectangularBogie.getCargo());
+        System.out.println("Final Cargo in Rectangular Bogie (safe attempt): " + rectangularBogieSafe.getCargo());
     }
 }
